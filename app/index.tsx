@@ -13,18 +13,15 @@ export default function Index() {
   const [clothing, setClothing] = useState(null);
 
   // Time Constants
-  const weekday = new Date().toLocaleDateString("en-US", {weekday: "long"});
-  const day = new Date().toLocaleDateString("en-US", {day: "numeric"});
-  const month = new Date().toLocaleDateString("en-US", {month: "long"});
-   
-  const time = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "numeric"}
-  );
+  const [weekday, setWeekday] =  useState("null");
+  const [day, setDay] = useState(0);
+  const [month, setMonth] = useState("null");
+
+  const date = new Date();
 
 // getSuffix Function
   // This ensures the number day has the right suffix (ex; 3rd instead of 3th)
-function getSuffix(num) {
+function getSuffix(num: number) {
 
   const lastDigit = num % 10;
   const lastTwo = num % 100;
@@ -64,6 +61,9 @@ useEffect(() => {
               .then((response) => response.json())
               .then((data) => {
                 setTemp(data.main.temp);
+                setWeekday(date.toLocaleDateString("en-US", {weekday: "long"}));
+                setDay(parseInt(date.toLocaleDateString("en-US", {day: "numeric"})));
+                setMonth(date.toLocaleDateString("en-US", {month: "long"}));
                 
               });
           }
@@ -81,8 +81,7 @@ useEffect(() => {
         alignItems: "center",
       }}
     >
-      <Text>{weekday}, {getSuffix(Number(day))}, {month} </Text>
-      <Text>{time}</Text>
+      <Text>{weekday}, {getSuffix(day)}, {month} </Text>
 
       <Text>Current Temperature: {temperature} </Text>
       <Text>You should grab a {clothing} today!</Text>
