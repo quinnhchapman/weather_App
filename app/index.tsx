@@ -1,6 +1,8 @@
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import React, {useState, useEffect} from "react";
 import * as Location from 'expo-location';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 // https://github.com/pierreamgabriel/react-native-weather-api
 
@@ -9,8 +11,9 @@ export default function Index() {
 
   // Weather Constants
   const [temperature, setTemp] = useState(0);
-  const [city, setCity] = useState(null);
   const [clothing, setClothing] = useState(null);
+  const [backColor, setbackColor] = useState('#fff');
+  const [icon, setIcon] = useState("weather-sunny");
 
   // Time Constants
   const [weekday, setWeekday] =  useState("null");
@@ -38,6 +41,36 @@ function getSuffix(num: number) {
   }
 }
 
+function evaluateTemperature(temp){
+  if (temp >= 90) {
+    setClothing("Tank Top");
+    setbackColor('#f76133ff');
+    setIcon("weather-sunny");
+  }
+  else if (temp >= 70) {
+    setClothing("T-Shirt");
+    setbackColor('#feb21bff');
+    setIcon("weather-partly-cloudy");git remote -v
+
+  }
+  else if (temp >= 55){
+    setClothing("Light Jacket");
+    setbackColor('#faf2abff');
+    setIcon("weather-cloudy");
+  }
+  else if (temp >= 40){
+    setClothing("Jacket");
+    setbackColor('#cafff1ff');
+    setIcon("weather-windy");
+  }
+  else {
+    setClothing("Winter Coat");
+    setbackColor('#428effff');
+    setIcon("weather-snowy");
+  }
+}
+
+
 // Location Request
 useEffect(() => {
 
@@ -61,6 +94,8 @@ useEffect(() => {
               .then((response) => response.json())
               .then((data) => {
                 setTemp(data.main.temp);
+                evaluateTemperature(data.main.temp);
+
                 setWeekday(date.toLocaleDateString("en-US", {weekday: "long"}));
                 setDay(parseInt(date.toLocaleDateString("en-US", {day: "numeric"})));
                 setMonth(date.toLocaleDateString("en-US", {month: "long"}));
@@ -74,17 +109,39 @@ useEffect(() => {
 
   // Return Statement
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>{weekday}, {getSuffix(day)}, {month} </Text>
+    <View style={[styles.container,{backgroundColor: backColor}]}>
 
-      <Text>Current Temperature: {temperature} </Text>
-      <Text>You should grab a {clothing} today!</Text>
+      <Text style = {styles.dateText}>
+        {weekday}, {getSuffix(day)} {month}
+      </Text>
+
+      <MaterialCommunityIcons name = {icon} size= {120} color ="#fff" />
+
+      <Text style={styles.temp}>Current Temperature: {temperature} °F</Text>
+      <Text style={styles.clothing}>You should grab a {clothing} today!</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateText: {
+    color: "#fff",
+    fontSize: 22,
+    marginBottom: 10,
+  },
+  temp: {
+    color: "#fff",
+    fontSize: 30,
+    marginTop: 10,
+  },
+  clothing: {
+    color: "#fff",
+    fontSize: 20,
+    marginTop: 10,
+  }
+});
