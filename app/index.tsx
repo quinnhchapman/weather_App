@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
 import React, {useState, useEffect} from "react";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 
@@ -11,7 +11,7 @@ export default function Index() {
 
   // Weather Constants
   const [temperature, setTemp] = useState(0);
-  const [clothing, setClothing] = useState(null);
+  const [clothing, setClothing] = useState("null");
   const [backColor, setbackColor] = useState('#fff');
   const [icon, setIcon] = useState("weather-sunny");
 
@@ -41,7 +41,7 @@ function getSuffix(num: number) {
   }
 }
 
-function evaluateTemperature(temp){
+function evaluateTemperature(temp: number){
   if (temp >= 90) {
     setClothing("Tank Top");
     setbackColor('#f76133ff');
@@ -50,7 +50,7 @@ function evaluateTemperature(temp){
   else if (temp >= 70) {
     setClothing("T-Shirt");
     setbackColor('#feb21bff');
-    setIcon("weather-partly-cloudy");git remote -v
+    setIcon("weather-partly-cloudy");
 
   }
   else if (temp >= 55){
@@ -115,7 +115,7 @@ useEffect(() => {
         {weekday}, {getSuffix(day)} {month}
       </Text>
 
-      <MaterialCommunityIcons name = {icon} size= {120} color ="#fff" />
+      <MaterialCommunityIcons name = {icon as any} size= {120} color ="#fff" />
 
       <Text style={styles.temp}>Current Temperature: {temperature} °F</Text>
       <Text style={styles.clothing}>You should grab a {clothing} today!</Text>
