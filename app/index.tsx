@@ -23,7 +23,7 @@ export default function Index() {
   const date = new Date();
 
 // getSuffix Function
-  // This ensures the number day has the right suffix (ex; 3rd instead of 3th)
+// This ensures the number day has the right suffix (ex; 3rd instead of 3th)
 function getSuffix(num: number) {
 
   const lastDigit = num % 10;
@@ -40,7 +40,8 @@ function getSuffix(num: number) {
     default: return num + "th";
   }
 }
-
+// Evaluate Temp function: determines what clothes should be worn that day,
+// as well as what color and icon should be shown
 function evaluateTemperature(temp: number){
   if (temp >= 90) {
     setClothing("Tank Top");
@@ -74,29 +75,34 @@ function evaluateTemperature(temp: number){
 // Location Request
 useEffect(() => {
 
+  // Asks the user to request permission (IOS location permissions)
   Location.requestForegroundPermissionsAsync().then(
       (permission: Location.PermissionResponse) => {
         if (permission.status !== "granted") {
           console.log("Permission denied");
+          // if permission is not granted, the app will not work!
           return;
         }
 
     Location.getCurrentPositionAsync({}).then(
           (location: Location.LocationObject) => {
             const { latitude, longitude } = location.coords;
-
+            // stores latitude and longitude
             const apiKey = "694a9a1429a0eb720906af6a6c3661b1";
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=${apiKey}`;
 
+            // allows access to the website with the api key and requests the temp for the location
+            // based on the lat and long ^
 
             
             fetch(url)
               .then((response) => response.json())
               .then((data) => {
+                // fetches the data and drills down, getting the temp for the loc requested
                 setTemp(data.main.temp);
                 evaluateTemperature(data.main.temp);
-                // evaluateTemperature(90);
-                // evaluateTemperature(70);
+                // evaluateTemperature(90); TEST CASE A
+                // evaluateTemperature(70); TEST CASE B
                 setWeekday(date.toLocaleDateString("en-US", {weekday: "long"}));
                 setDay(parseInt(date.toLocaleDateString("en-US", {day: "numeric"})));
                 setMonth(date.toLocaleDateString("en-US", {month: "long"}));
@@ -119,8 +125,8 @@ useEffect(() => {
       <MaterialCommunityIcons name = {icon as any} size= {120} color ="#fff" />
 
       <Text style={styles.temp}>Current Temperature: {temperature} °F</Text>
-      {/* <Text style={styles.temp}>Current Temperature: {90} °F</Text> */}
-      {/* <Text style={styles.temp}>Current Temperature: {70} °F</Text> */}
+      {/* <Text style={styles.temp}>Current Temperature: {90} °F</Text> TEST CASE A*/}
+      {/* <Text style={styles.temp}>Current Temperature: {70} °F</Text> TEST CASE B*/}
       <Text style={styles.clothing}>You should grab a {clothing} today!</Text>
     </View>
   );
