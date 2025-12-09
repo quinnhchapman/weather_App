@@ -95,7 +95,8 @@ useEffect(() => {
               .then((data) => {
                 setTemp(data.main.temp);
                 evaluateTemperature(data.main.temp);
-
+                // evaluateTemperature(90);
+                // evaluateTemperature(70);
                 setWeekday(date.toLocaleDateString("en-US", {weekday: "long"}));
                 setDay(parseInt(date.toLocaleDateString("en-US", {day: "numeric"})));
                 setMonth(date.toLocaleDateString("en-US", {month: "long"}));
@@ -118,6 +119,8 @@ useEffect(() => {
       <MaterialCommunityIcons name = {icon as any} size= {120} color ="#fff" />
 
       <Text style={styles.temp}>Current Temperature: {temperature} °F</Text>
+      {/* <Text style={styles.temp}>Current Temperature: {90} °F</Text> */}
+      {/* <Text style={styles.temp}>Current Temperature: {70} °F</Text> */}
       <Text style={styles.clothing}>You should grab a {clothing} today!</Text>
     </View>
   );
